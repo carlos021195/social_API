@@ -10,7 +10,9 @@ router.post("/", async (req, res) => {
   const currentPost = Post.findById(req.body.postId);
   try {
     const savedComment = await newComment.save();
-    const updatedPost = await currentPost.updateOne({ $push: { comments: savedComment.id } })
+    const updatedPost = await currentPost.updateOne({
+      $push: { comments: savedComment.id },
+    });
     res.status(200).json(savedComment);
   } catch (err) {
     res.status(500).json(err);
@@ -40,7 +42,7 @@ router.delete("/:id", async (req, res) => {
     const comment = await Comment.findById(req.params.id);
     const post = await Post.findById(comment.postId);
     if (comment.userId === req.body.userId) {
-      await post.updateOne({$pull: {comments: comment.id} });
+      await post.updateOne({ $pull: { comments: comment.id } });
       await comment.deleteOne();
       res.status(200).json("the comment has been deleted");
     } else {
@@ -84,7 +86,7 @@ router.get("/all/:postId", async (req, res) => {
   try {
     // const currentUser = await User.findById(req.params.userId);
     const currentPost = await Post.findById(req.params.postId);
-    const  postComments = await Promise.all(
+    const postComments = await Promise.all(
       currentPost.comments.map((commentId) => {
         return Comment.find({ commentId: commentId });
       })

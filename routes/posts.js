@@ -101,14 +101,14 @@ router.get("/profile/:username", async (req, res) => {
 
 //get all posts
 
-router.get("/allPosts/all", async (req,res) => {
+router.get("/allPosts/all", async (req, res) => {
   let postArray = [];
-  try{
-      const allPosts = await Post.find({}).limit(100);
-      res.status(200).json(allPosts);
-  } catch(err){
-      res.status(500).json(err);
+  try {
+    const allPosts = await Post.find({}).limit(100);
+    res.status(200).json(allPosts);
+  } catch (err) {
+    res.status(500).json(err);
   }
-})
+});
 
 module.exports = router;
