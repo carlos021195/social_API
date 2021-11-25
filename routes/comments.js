@@ -69,7 +69,7 @@ router.put("/:id/like", async (req, res) => {
     res.status(500).json(err);
   }
 });
-//get a post
+//get a comment
 
 router.get("/:id", async (req, res) => {
   try {
@@ -86,12 +86,12 @@ router.get("/all/:postId", async (req, res) => {
   try {
     // const currentUser = await User.findById(req.params.userId);
     const currentPost = await Post.findById(req.params.postId);
-    const postComments = await Promise.all(
-      currentPost.comments.map((commentId) => {
-        return Comment.find({ commentId: commentId });
-      })
-    );
-    res.status(200).json(postComments);
+    console.log(currentPost.comments)
+    if(currentPost.comments.length > 0) {
+      const postComments = await Comment.find({ _id: {$in: currentPost.comments }});
+      res.status(200).json(postComments);
+    }
+    else res.status(200).json(currentPost.comments);
   } catch (err) {
     res.status(500).json(err);
   }

@@ -70,6 +70,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//FIX ME ---------------------------v
 //get timeline posts
 
 router.get("/timeline/:userId", async (req, res) => {
