@@ -119,4 +119,14 @@ router.put("/:id/unfollow", async (req, res) => {
   }
 });
 
+// search for users
+router.get("/:username/search", async (req, res) => {
+  try {
+    const users = await User.find({username: { $regex: '.*' + req.params.username + '.*'} }).limit(5);
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
 module.exports = router;
