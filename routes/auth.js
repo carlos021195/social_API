@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 //REGISTER
 router.post("/register", async (req, res) => {
@@ -18,9 +22,10 @@ router.post("/register", async (req, res) => {
 
     //save user and respond
     const user = await newUser.save();
-    res.status(200).json(user);
+    const token = jwt.sign({id: user._id}, process.env.SECRET_KEY);
+    res.status(200).json( {auth: true, token: token} );
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({auth: false}, err);
   }
 });
 
@@ -41,8 +46,8 @@ router.post("/login", async (req, res) => {
       res.status(400).json("wrong password");
       return;
     }
-
-    res.status(200).json(user);
+    const token = jwt.sign({id: user._id}, process.env.SECRET_KEY);
+    res.status(200).json({ auth: true, token: token, user});
   } catch (err) {
     res.status(500).json(err);
   }

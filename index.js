@@ -9,7 +9,6 @@ const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const commentRoute = require("./routes/comments");
-const router = express.Router();
 const path = require("path");
 const cors = require("cors");
 
