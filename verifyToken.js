@@ -5,7 +5,6 @@ dotenv.config();
 
 const verifyToken = (req, res, next) => {
     const bearerHeader = req.header('authorization');
-    console.log(bearerHeader);
   
     if (bearerHeader) {
       const bearer = bearerHeader.split(' ');

@@ -11,6 +11,7 @@ const postRoute = require("./routes/posts");
 const commentRoute = require("./routes/comments");
 const path = require("path");
 const cors = require("cors");
+const port = process.env.PORT || 3000
 
 app.use(cors());
 
@@ -53,7 +54,7 @@ app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 
-app.listen(8800, () => {
+app.listen(port, () => {
   console.log("Backend server is running!");
 });
 

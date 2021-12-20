@@ -87,7 +87,6 @@ router.get("/all/:postId", verifyToken, async (req, res) => {
   try {
     // const currentUser = await User.findById(req.params.userId);
     const currentPost = await Post.findById(req.params.postId);
-    console.log(currentPost.comments)
     if(currentPost.comments.length > 0) {
       const postComments = await Comment.find({ _id: {$in: currentPost.comments }});
       res.status(200).json(postComments);
