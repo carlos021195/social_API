@@ -2,10 +2,11 @@ const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Comment = require("../models/Comment");
+const verifyToken = require("../verifyToken").verifyToken;
 
 //create a comment
 
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   const newComment = new Comment(req.body);
   const currentPost = Post.findById(req.body.postId);
   try {
@@ -21,7 +22,7 @@ router.post("/", async (req, res) => {
 
 //update a post
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken ,async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
     if (comment.userId === req.body.userId) {
@@ -37,7 +38,7 @@ router.put("/:id", async (req, res) => {
 //delete a post
 //need to remove the commentId from the post
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
     const post = await Post.findById(comment.postId);
@@ -55,7 +56,7 @@ router.delete("/:id", async (req, res) => {
 
 //like / dislike a comment
 
-router.put("/:id/like", async (req, res) => {
+router.put("/:id/like", verifyToken, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
     if (!comment.likes.includes(req.body.userId)) {
@@ -71,7 +72,7 @@ router.put("/:id/like", async (req, res) => {
 });
 //get a comment
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
     res.status(200).json(comment);
@@ -82,7 +83,7 @@ router.get("/:id", async (req, res) => {
 
 //get all comments
 
-router.get("/all/:postId", async (req, res) => {
+router.get("/all/:postId", verifyToken, async (req, res) => {
   try {
     // const currentUser = await User.findById(req.params.userId);
     const currentPost = await Post.findById(req.params.postId);

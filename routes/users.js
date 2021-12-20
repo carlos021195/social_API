@@ -1,9 +1,10 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const verifyToken = require("../verifyToken").verifyToken;
 
 //update user
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     if (req.body.password) {
       try {
@@ -27,7 +28,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //delete user
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     try {
       await User.findByIdAndDelete(req.params.id);
@@ -41,7 +42,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //get a user
-router.get("/", async (req, res) => {
+router.get("/", verifyToken ,async (req, res) => {
   const userId = req.query.userId;
   const username = req.query.username;
   try {
@@ -56,7 +57,7 @@ router.get("/", async (req, res) => {
 });
 
 //get friends
-router.get("/friends/:userId", async (req, res) => {
+router.get("/friends/:userId", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     const friends = await Promise.all(
@@ -77,7 +78,7 @@ router.get("/friends/:userId", async (req, res) => {
 
 //follow a user
 
-router.put("/:id/follow", async (req, res) => {
+router.put("/:id/follow", verifyToken, async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {
       const user = await User.findById(req.params.id);
@@ -99,7 +100,7 @@ router.put("/:id/follow", async (req, res) => {
 
 //unfollow a user
 
-router.put("/:id/unfollow", async (req, res) => {
+router.put("/:id/unfollow", verifyToken, async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {
       const user = await User.findById(req.params.id);
@@ -120,7 +121,7 @@ router.put("/:id/unfollow", async (req, res) => {
 });
 
 // search for users
-router.get("/:username/search", async (req, res) => {
+router.get("/:username/search", verifyToken, async (req, res) => {
   try {
     const users = await User.find({username: { $regex: '.*' + req.params.username + '.*'} }).limit(5);
     res.status(200).json(users);
