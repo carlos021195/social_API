@@ -77,6 +77,7 @@ router.get("/:id", verifyToken, async (req, res) => {
 router.get("/timeline/:userId", verifyToken, async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId);
+    console.log(currentUser.followings);
     const userPosts = await Post.find({ userId: currentUser._id });
     const friendPosts = await Promise.all(
       currentUser.followings.map((friendId) => {
