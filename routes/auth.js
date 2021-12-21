@@ -23,9 +23,9 @@ router.post("/register", async (req, res) => {
     //save user and respond
     const user = await newUser.save();
     const token = jwt.sign({id: user._id}, process.env.SECRET_KEY);
-    res.status(200).json( {auth: true, token: token} );
+    res.status(200).json( {token: token} );
   } catch (err) {
-    res.status(500).json({auth: false}, err);
+    res.status(500).json(err);
   }
 });
 
