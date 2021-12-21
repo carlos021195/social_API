@@ -71,7 +71,6 @@ router.get("/:id", verifyToken, async (req, res) => {
   }
 });
 
-//FIX ME ---------------------------v
 //get timeline posts
 
 router.get("/timeline/:userId", verifyToken, async (req, res) => {
@@ -81,7 +80,10 @@ router.get("/timeline/:userId", verifyToken, async (req, res) => {
     const userPosts = await Post.find({ userId: currentUser._id });
     const friendPosts = await Promise.all(
       currentUser.followings.map((friendId) => {
-        return Post.find({ userId: friendId });
+        try{
+          return Post.find({ userId: friendId });
+        }
+        catch (err){}
       })
     );
     res.status(200).json(userPosts.concat(...friendPosts));
